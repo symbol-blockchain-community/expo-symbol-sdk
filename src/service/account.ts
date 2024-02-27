@@ -11,7 +11,7 @@ export class Account {
     /** The account address. */
     public readonly address: Address,
     /** The account keyPair, public and private key. */
-    private readonly keyPair: IKeyPair
+    private readonly keyPair: IKeyPair,
   ) {}
 
   /** Account public key. */

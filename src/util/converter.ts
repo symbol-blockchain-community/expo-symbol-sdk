@@ -43,15 +43,9 @@ export class Convert {
    * @param expectedSize the expected size of the input
    * @param message error message.
    */
-  public static validateHexString = (
-    input: string,
-    expectedSize: number,
-    message: string
-  ): void => {
+  public static validateHexString = (input: string, expectedSize: number, message: string): void => {
     if (!Convert.isHexString(input, expectedSize)) {
-      throw new Error(
-        `${message}. Value ${input} is not an hex string of size ${expectedSize}.`
-      );
+      throw new Error(`${message}. Value ${input} is not an hex string of size ${expectedSize}.`);
     }
   };
 
@@ -82,10 +76,7 @@ export class Convert {
     }
     const output = new Uint8Array(input.length / 2);
     for (let i = 0; i < input.length; i += 2) {
-      output[output.length - 1 - i / 2] = Convert.toByte(
-        input[i],
-        input[i + 1]
-      );
+      output[output.length - 1 - i / 2] = Convert.toByte(input[i], input[i + 1]);
     }
     return output;
   };
@@ -110,16 +101,14 @@ export class Convert {
    * @param input A uint8 array.
    * @returns A uint32 array created from the input.
    */
-  public static uint8ToUint32 = (input: Uint8Array): Uint32Array =>
-    new Uint32Array(input.buffer);
+  public static uint8ToUint32 = (input: Uint8Array): Uint32Array => new Uint32Array(input.buffer);
 
   /**
    * Converts a uint32 array to a uint8 array.
    * @param input A uint32 array.
    * @returns A uint8 array created from the input.
    */
-  public static uint32ToUint8 = (input: Uint32Array): Uint8Array =>
-    new Uint8Array(input.buffer);
+  public static uint32ToUint8 = (input: Uint32Array): Uint8Array => new Uint8Array(input.buffer);
 
   /** Converts an unsigned byte to a signed byte with the same binary representation.
    * @param input An unsigned byte.
@@ -210,10 +199,7 @@ export class Convert {
    * @param number the number
    * @param arraySize the expected size of the array.
    */
-  public static numberToUint8Array(
-    number: number,
-    arraySize: number
-  ): Uint8Array {
+  public static numberToUint8Array(number: number, arraySize: number): Uint8Array {
     const uint8Array = new Uint8Array(arraySize);
     for (let index = 0; index < uint8Array.length; index++) {
       const byte = number & 0xff;

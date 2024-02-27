@@ -27,10 +27,9 @@ export class RawArray {
     src: Uint8Array,
     numElementsToCopy?: number,
     destOffset: number = 0,
-    srcOffset: number = 0
+    srcOffset: number = 0,
   ): any => {
-    const length =
-      undefined === numElementsToCopy ? dest.length : numElementsToCopy;
+    const length = undefined === numElementsToCopy ? dest.length : numElementsToCopy;
     for (let i = 0; i < length; ++i) {
       dest[destOffset + i] = src[srcOffset + i];
     }
@@ -41,8 +40,7 @@ export class RawArray {
    * @param {Array} array The array to check.
    * @returns {boolean} true if the array is zero-filled, false otherwise.
    */
-  public static isZeroFilled = (array: Array<any>): boolean =>
-    array.every((value) => 0 === value);
+  public static isZeroFilled = (array: Array<any>): boolean => array.every((value) => 0 === value);
 
   /**
    * Deeply checks the equality of two arrays.
@@ -51,11 +49,7 @@ export class RawArray {
    * @param {number} [numElementsToCompare=undefined] The number of elements to compare.
    * @returns {boolean} true if all compared elements are equal, false otherwise.
    */
-  public static deepEqual = (
-    lhs: Uint8Array,
-    rhs: Uint8Array,
-    numElementsToCompare?: number
-  ): boolean => {
+  public static deepEqual = (lhs: Uint8Array, rhs: Uint8Array, numElementsToCompare?: number): boolean => {
     let length = numElementsToCompare;
     if (undefined === length) {
       if (lhs.length !== rhs.length) {

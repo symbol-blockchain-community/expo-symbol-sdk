@@ -1,6 +1,7 @@
 import nacl from "tweetnacl";
 import { Convert } from "./converter";
-import { Key_Size } from "./keypair-utils";
+
+const Key_Size = 32;
 
 export class KeyPair {
   /**
@@ -31,7 +32,7 @@ export class KeyPair {
       privateKey: Uint8Array;
       publicKey: Uint8Array;
     },
-    data: Uint8Array
+    data: Uint8Array,
   ): Uint8Array {
     const secretKey = new Uint8Array(64);
     secretKey.set(keyPair.privateKey);
@@ -46,11 +47,7 @@ export class KeyPair {
    * @param {Uint8Array} signature The signature to verify.
    * @returns {boolean} true if the signature is verifiable, false otherwise.
    */
-  public static verify(
-    publicKey: Uint8Array,
-    data: Uint8Array,
-    signature: Uint8Array
-  ): boolean {
+  public static verify(publicKey: Uint8Array, data: Uint8Array, signature: Uint8Array): boolean {
     return nacl.sign.detached.verify(data, signature, publicKey);
   }
 }

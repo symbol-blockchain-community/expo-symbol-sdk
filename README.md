@@ -2,9 +2,9 @@
 
 This library is a lightweight SDK extracted from the Symbol SDK’s use of Node.js’s crypto module. To avoid complex dependency resolutions on platforms like Web, Node.js, and React Native, this library serves as the base for SDKs tailored to each platform. This light version of the SDK offers the following features:
 
-* Creation and loading of private keys
-* Encryption and decryption of messages
-* Signing of transaction payloads with a private key
+- Creation and loading of private keys
+- Encryption and decryption of messages
+- Signing of transaction payloads with a private key
 
 ## Installation
 

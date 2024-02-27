@@ -24,10 +24,7 @@ export class RawAddress {
     if (RawAddress.constants.sizes.addressEncoded !== encoded.length) {
       throw Error(`${encoded} does not represent a valid encoded address`);
     }
-    return Base32.Base32Decode(`${encoded}A`).subarray(
-      0,
-      RawAddress.constants.sizes.addressDecoded
-    );
+    return Base32.Base32Decode(`${encoded}A`).subarray(0, RawAddress.constants.sizes.addressDecoded);
   };
 
   /**
@@ -36,10 +33,7 @@ export class RawAddress {
    * @param {networkType} networkType network type serialized in the output.
    * @returns {Uint8Array} The padded notation of the alias
    */
-  public static aliasToRecipient = (
-    namespaceId: Uint8Array,
-    networkType: NetworkType
-  ): Uint8Array => {
+  public static aliasToRecipient = (namespaceId: Uint8Array, networkType: NetworkType): Uint8Array => {
     // 0x91 | namespaceId on 8 bytes | 15 bytes 0-pad = 24 bytes
     const padded = new Uint8Array(1 + 8 + 15);
     padded.set([networkType.valueOf() | 0x01], 0);
@@ -55,15 +49,9 @@ export class RawAddress {
    */
   public static addressToString = (decoded: Uint8Array): string => {
     if (RawAddress.constants.sizes.addressDecoded !== decoded.length) {
-      throw Error(
-        `${Convert.uint8ToHex(
-          decoded
-        )} does not represent a valid decoded address`
-      );
+      throw Error(`${Convert.uint8ToHex(decoded)} does not represent a valid decoded address`);
     }
-    const padded = new Uint8Array(
-      RawAddress.constants.sizes.addressDecoded + 1
-    );
+    const padded = new Uint8Array(RawAddress.constants.sizes.addressDecoded + 1);
     padded.set(decoded);
     return Base32.Base32Encode(padded).slice(0, -1);
   };
@@ -74,40 +62,26 @@ export class RawAddress {
    * @param {NetworkType} networkType The network identifier.
    * @returns {Uint8Array} The decoded address corresponding to the inputs.
    */
-  public static publicKeyToAddress = (
-    publicKey: Uint8Array,
-    networkType: NetworkType
-  ): Uint8Array => {
+  public static publicKeyToAddress = (publicKey: Uint8Array, networkType: NetworkType): Uint8Array => {
     // step 1: sha3 hash of the public key
     const publicKeyHash = sha3_256.arrayBuffer(publicKey);
 
     // step 2: ripemd160 hash of (1)
-    const ripemdHash = new ripemd160()
-      .update(Buffer.from(publicKeyHash))
-      .digest();
+    const ripemdHash = new ripemd160().update(Buffer.from(publicKeyHash)).digest();
 
     // step 3: add network identifier byte in front of (2)
-    const decodedAddress = new Uint8Array(
-      RawAddress.constants.sizes.addressDecoded
-    );
+    const decodedAddress = new Uint8Array(RawAddress.constants.sizes.addressDecoded);
     decodedAddress[0] = networkType;
-    RawArray.copy(
-      decodedAddress,
-      ripemdHash,
-      RawAddress.constants.sizes.ripemd160,
-      1
-    );
+    RawArray.copy(decodedAddress, ripemdHash, RawAddress.constants.sizes.ripemd160, 1);
 
     // step 4: concatenate (3) and the checksum of (3)
-    const hash = sha3_256.arrayBuffer(
-      decodedAddress.subarray(0, RawAddress.constants.sizes.ripemd160 + 1)
-    );
+    const hash = sha3_256.arrayBuffer(decodedAddress.subarray(0, RawAddress.constants.sizes.ripemd160 + 1));
 
     RawArray.copy(
       decodedAddress,
       RawArray.uint8View(hash),
       RawAddress.constants.sizes.checksum,
-      RawAddress.constants.sizes.ripemd160 + 1
+      RawAddress.constants.sizes.ripemd160 + 1,
     );
 
     return decodedAddress;
@@ -123,16 +97,10 @@ export class RawAddress {
       return false;
     }
     const hash = sha3_256.create();
-    const checksumBegin =
-      RawAddress.constants.sizes.addressDecoded -
-      RawAddress.constants.sizes.checksum;
+    const checksumBegin = RawAddress.constants.sizes.addressDecoded - RawAddress.constants.sizes.checksum;
     hash.update(decoded.subarray(0, checksumBegin));
     const checksum = new Uint8Array(RawAddress.constants.sizes.checksum);
-    RawArray.copy(
-      checksum,
-      RawArray.uint8View(hash.arrayBuffer()),
-      RawAddress.constants.sizes.checksum
-    );
+    RawArray.copy(checksum, RawArray.uint8View(hash.arrayBuffer()), RawAddress.constants.sizes.checksum);
     return RawArray.deepEqual(checksum, decoded.subarray(checksumBegin));
   };
 }

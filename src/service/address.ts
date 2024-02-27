@@ -91,7 +91,7 @@ export class Address {
     /**
      * The NEM network type.
      */
-    public readonly networkType: NetworkType
+    public readonly networkType: NetworkType,
   ) {}
 
   /**
