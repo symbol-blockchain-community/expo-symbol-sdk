@@ -6,10 +6,17 @@ This library is a lightweight SDK extracted from the Symbol SDK’s use of Node.
 - Encryption and decryption of messages
 - Signing of transaction payloads with a private key
 
+## Target Users
+
+* Developers considering Symbol blockchain application development on Expo environment
+* Developers who want to leverage the convenience of Managed React Native while developing secure Symbol applications
+* Developers already familiar with symbol-sdk
+
+
 ## Installation
 
 ```shell
-npm install symbol-sdk@3 symbol-sdk-crypto
+npm install @symbol-blockchain-community/expo-symbol-sdk
 ```
 
 ## Usage
@@ -17,7 +24,7 @@ npm install symbol-sdk@3 symbol-sdk-crypto
 Create PrivateKey
 
 ```ts
-import { Account, NetworkType } from "symbol-sdk-crypto";
+import { Account, NetworkType } from "@symbol-blockchain-community/expo-symbol-sdk";
 
 const account = Account.generateNewAccount(NetworkType.TEST_NET);
 console.log(account);
@@ -44,16 +51,29 @@ console.log(signedPayload);
 Encryption and decryption of messages.
 
 ```ts
-import { Account, NetworkType, EncryptMessage } from "symbol-sdk-crypto";
+import { MessageEncoder, Account } from "@symbol-blockchain-community/expo-symbol-sdk";
+import { Account, NetworkType } from "symbol-sdk";
 
+const alice = Account.generateNewAccount(NetworkType.TEST_NET);
 const bob = Account.generateNewAccount(NetworkType.TEST_NET);
-const ben = Account.generateNewAccount(NetworkType.TEST_NET);
 
-// encrypt message
-const message = EncryptMessage.encrypt(bob.privateKey, ben.publicKey, "hello");
-console.log(message);
+const messageEncoder = new MessageEncoder(alice.privateKey);
+const messageDecoder = new MessageEncoder(bob.privateKey);
 
-// decrypto message
-const decrypt = EncryptMessage.decrypt(ben.privateKey, bob.publicKey, message);
-console.log(decrypt);
+const encoded = messageEncoder.encode(bob.publicKey, 'Hello, symbol!');
+console.log('encoded: ', encoded);
+const decoded = messageDecoder.tryDecode(alice.publicKey, encoded);
+console.log('decoded: ', decoded);
 ```
+
+## Contributing
+
+expo-symbol-crypto is an open-source project. Contributions are welcome. Please refer to the GitHub repository for details.
+
+## License
+
+This software is provided under the [MIT License](./LICENSE).
+
+## Contact
+
+For questions or feedback, please contact us through the GitHub repository.
