@@ -189,8 +189,8 @@ const deriveSharedKeyFactory = (
 ): ((privateKey: Uint8Array, otherPublicKey: Uint8Array) => Uint8Array) => {
   const deriveSharedSecret = deriveSharedSecretFactory(cryptoHash);
   return (privateKey, otherPublicKey) => {
-    const sharedSecret = Buffer.from(deriveSharedSecret(privateKey, otherPublicKey));
-    return hkdf.deriveSecret(sharedSecret, Buffer.alloc(32), Buffer.from(info, "utf-8"), 32);
+    const sharedSecret = deriveSharedSecret(privateKey, otherPublicKey);
+    return hkdf.deriveSecret(sharedSecret, new Uint8Array(32), info, 32);
   };
 };
 

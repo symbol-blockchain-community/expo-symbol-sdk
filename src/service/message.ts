@@ -1,5 +1,6 @@
 import { TryDecodeResult } from "../model/message";
-import { encodeAesGcm, decodeAesGcm, concatArrays } from "../util/cipherHelpers";
+import { encodeAesGcm, decodeAesGcm } from "../util/cipherHelpers";
+import { Convert } from "../util/converter";
 import { deriveSharedKey } from "../util/sharedKey";
 
 const utf8ArrayToString = (uint8Array: Uint8Array) => {
@@ -32,7 +33,7 @@ export class MessageEncoder {
    * @param {string} privateKey private key.
    */
   constructor(privateKey: Uint8Array | string) {
-    this._privateKey = typeof privateKey === "string" ? Buffer.from(privateKey, "hex") : privateKey;
+    this._privateKey = typeof privateKey === "string" ? Convert.hexToUint8(privateKey) : privateKey;
   }
 
   /**
@@ -44,7 +45,7 @@ export class MessageEncoder {
   tryDecode(recipientPublicKey: Uint8Array | string, encodedMessage: Uint8Array): TryDecodeResult {
     recipientPublicKey =
       typeof recipientPublicKey === "string"
-        ? new Uint8Array(Buffer.from(recipientPublicKey, "hex"))
+        ? Convert.hexToUint8(recipientPublicKey)
         : recipientPublicKey;
     if (1 === encodedMessage[0]) {
       const [result, message] = filterExceptions(
@@ -65,14 +66,13 @@ export class MessageEncoder {
    */
   encode(recipientPublicKey: Uint8Array | string, message: string): Uint8Array {
     recipientPublicKey =
-      typeof recipientPublicKey === "string" ? Buffer.from(recipientPublicKey, "hex") : recipientPublicKey;
+      typeof recipientPublicKey === "string" ? Convert.hexToUint8(recipientPublicKey) : recipientPublicKey;
     const { tag, initializationVector, cipherText } = encodeAesGcm(
       deriveSharedKey,
       this._privateKey,
       recipientPublicKey,
-      new Uint8Array(Buffer.from(message, "utf-8"))
+      new Uint8Array(Convert.utf8ToUint8(message))
     );
-
-    return concatArrays(new Uint8Array([1]), tag, initializationVector, cipherText);
+    return Convert.hexToUint8('01' + tag + initializationVector + cipherText);
   }
 }
