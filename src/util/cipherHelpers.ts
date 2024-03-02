@@ -1,4 +1,4 @@
-import { AesGcmCipher } from "./cipher";
+import { AesGcmCipher } from './cipher';
 
 const GCM_IV_SIZE = 12;
 const SALT_SIZE = 32;
@@ -13,7 +13,7 @@ const decodeAesGcm = (
   deriveSharedKey: (privateKey: Uint8Array, recipientPublicKey: Uint8Array) => Uint8Array,
   privateKey: Uint8Array,
   recipientPublicKey: Uint8Array,
-  encodedMessage: Uint8Array,
+  encodedMessage: Uint8Array
 ) => {
   const { tag, initializationVector, encodedMessageData } = decode(AesGcmCipher.TAG_SIZE, GCM_IV_SIZE, encodedMessage);
 

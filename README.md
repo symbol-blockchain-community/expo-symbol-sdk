@@ -8,10 +8,9 @@ This library is a lightweight SDK extracted from the Symbol SDK’s use of Node.
 
 ## Target Users
 
-* Developers considering Symbol blockchain application development on Expo environment
-* Developers who want to leverage the convenience of Managed React Native while developing secure Symbol applications
-* Developers already familiar with symbol-sdk
-
+- Developers considering Symbol blockchain application development on Expo environment
+- Developers who want to leverage the convenience of Managed React Native while developing secure Symbol applications
+- Developers already familiar with symbol-sdk
 
 ## Installation
 
@@ -24,7 +23,7 @@ npm install @symbol-blockchain-community/expo-symbol-sdk
 Create PrivateKey
 
 ```ts
-import { Account, NetworkType } from "@symbol-blockchain-community/expo-symbol-sdk";
+import { Account, NetworkType } from '@symbol-blockchain-community/expo-symbol-sdk';
 
 const account = Account.generateNewAccount(NetworkType.TEST_NET);
 console.log(account);
@@ -35,14 +34,14 @@ Signing a transaction created with symbol-sdk.
 ```ts
 const account = Account.generateNewAccount(NetworkType.TEST_NET);
 
-const generationHash = "49D6E1CE276A85B70EAFE52349AACCA389302E7A9754BCF1221E79494FC665A4";
+const generationHash = '49D6E1CE276A85B70EAFE52349AACCA389302E7A9754BCF1221E79494FC665A4';
 const serializedTransactionPayload =
-  "AE00000000000000000000000000000000000000000000000000000000000000" +
-  "0000000000000000000000000000000000000000000000000000000000000000" +
-  "0000000000000000000000000000000000000000000000000000000000000000" +
-  "0000000000000000000000000000000000000000000000000000000000000001" +
-  "985441F84300000000000003983E640900000098EC10797B167D59E419781125" +
-  "EE36676AA61D9E4F90CDAF0E000000000000000048656C6C6F2053796D626F6C21";
+  'AE00000000000000000000000000000000000000000000000000000000000000' +
+  '0000000000000000000000000000000000000000000000000000000000000000' +
+  '0000000000000000000000000000000000000000000000000000000000000000' +
+  '0000000000000000000000000000000000000000000000000000000000000001' +
+  '985441F84300000000000003983E640900000098EC10797B167D59E419781125' +
+  'EE36676AA61D9E4F90CDAF0E000000000000000048656C6C6F2053796D626F6C21';
 
 const signedPayload = account.sign(serializedTransactionPayload, generationHash);
 console.log(signedPayload);
@@ -51,8 +50,8 @@ console.log(signedPayload);
 Encryption and decryption of messages.
 
 ```ts
-import { MessageEncoder, Account } from "@symbol-blockchain-community/expo-symbol-sdk";
-import { Account, NetworkType } from "symbol-sdk";
+import { MessageEncoder, Account } from '@symbol-blockchain-community/expo-symbol-sdk';
+import { Account, NetworkType } from 'symbol-sdk';
 
 const alice = Account.generateNewAccount(NetworkType.TEST_NET);
 const bob = Account.generateNewAccount(NetworkType.TEST_NET);

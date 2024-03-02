@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import tweetnacl from "tweetnacl";
-import hkdf from "./hkdf";
+import tweetnacl from 'tweetnacl';
+import hkdf from './hkdf';
 
-declare module "tweetnacl" {
+declare module 'tweetnacl' {
   interface nacl {
     lowlevel: object;
   }
@@ -145,7 +145,7 @@ const isInMainSubgroup = (point: any[]) => {
  */
 const deriveSharedSecretFactory =
   (
-    cryptoHash: (output: Uint8Array, input: Uint8Array, inputLen?: number) => void,
+    cryptoHash: (output: Uint8Array, input: Uint8Array, inputLen?: number) => void
   ): ((privateKey: Uint8Array, publicKey: Uint8Array) => Uint8Array) =>
   (privateKey, otherPublicKey) => {
     const { scalarmult, Z } = tweetnacl_lowlevel;
@@ -156,7 +156,7 @@ const deriveSharedSecretFactory =
       0 !== unpackNeg(point, Array.from(otherPublicKey)) ||
       !isInMainSubgroup(point)
     )
-      throw Error("invalid point");
+      throw Error('invalid point');
 
     // negate point == negate X coordinate and 't'
     Z(point[0], gf(), point[0]);
@@ -185,7 +185,7 @@ const deriveSharedSecretFactory =
  */
 const deriveSharedKeyFactory = (
   info: string,
-  cryptoHash: (output: Uint8Array, input: Uint8Array, inputLen?: number) => void,
+  cryptoHash: (output: Uint8Array, input: Uint8Array, inputLen?: number) => void
 ): ((privateKey: Uint8Array, otherPublicKey: Uint8Array) => Uint8Array) => {
   const deriveSharedSecret = deriveSharedSecretFactory(cryptoHash);
   return (privateKey, otherPublicKey) => {
@@ -194,7 +194,7 @@ const deriveSharedKeyFactory = (
   };
 };
 
-const deriveSharedKeyImpl = deriveSharedKeyFactory("catapult", tweetnacl_lowlevel.crypto_hash);
+const deriveSharedKeyImpl = deriveSharedKeyFactory('catapult', tweetnacl_lowlevel.crypto_hash);
 
 /**
  * Derives shared key from key pair and other party's public key.

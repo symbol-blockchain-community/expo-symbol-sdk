@@ -1,5 +1,5 @@
-import nacl from "tweetnacl";
-import { Convert } from "./converter";
+import nacl from 'tweetnacl';
+import { Convert } from './converter';
 
 const Key_Size = 32;
 
@@ -32,7 +32,7 @@ export class KeyPair {
       privateKey: Uint8Array;
       publicKey: Uint8Array;
     },
-    data: Uint8Array,
+    data: Uint8Array
   ): Uint8Array {
     const secretKey = new Uint8Array(64);
     secretKey.set(keyPair.privateKey);

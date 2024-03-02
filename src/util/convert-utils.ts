@@ -23,14 +23,14 @@ export const createBuilder = (): any => {
 
 const Char_To_Nibble_Map = (): any => {
   const builder = createBuilder();
-  builder.addRange("0", "9", 0);
-  builder.addRange("a", "f", 10);
-  builder.addRange("A", "F", 10);
+  builder.addRange('0', '9', 0);
+  builder.addRange('a', 'f', 10);
+  builder.addRange('A', 'F', 10);
   return builder.map;
 };
 
-export const Nibble_To_Char_Map = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-export const Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+export const Nibble_To_Char_Map = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+export const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 export const Decoded_Block_Size = 5;
 export const Encoded_Block_Size = 8;
 export const tryParseByte = (char1: string, char2: string): any => {
@@ -53,8 +53,8 @@ export const encodeBlock = (input: any, inputOffset: number, output: any, output
 
 export const Char_To_Decoded_Char_Map = (): any => {
   const builder = createBuilder();
-  builder.addRange("A", "Z", 0);
-  builder.addRange("2", "7", 26);
+  builder.addRange('A', 'Z', 0);
+  builder.addRange('2', '7', 26);
   return builder.map;
 };
 
@@ -87,7 +87,7 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
  */
 export const parseObjectProperties = (obj: any[], parse: Function): any => {
   for (const k in obj) {
-    if (typeof obj[k] === "object" && obj[k] !== null) {
+    if (typeof obj[k] === 'object' && obj[k] !== null) {
       parseObjectProperties(obj[k], parse);
     } else if (Object.prototype.hasOwnProperty.call(obj, k)) {
       parse(k, obj[k]);

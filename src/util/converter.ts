@@ -1,5 +1,5 @@
-import { decode } from "utf8";
-import * as utilities from "./convert-utils";
+import { decode } from 'utf8';
+import * as utilities from './convert-utils';
 
 export class Convert {
   /**
@@ -87,7 +87,7 @@ export class Convert {
    * @returns A hex encoded string corresponding to the input.
    */
   public static uint8ToHex = (input: Uint8Array): string => {
-    let s = "";
+    let s = '';
     for (const byte of input) {
       s += utilities.Nibble_To_Char_Map[byte >> 4];
       s += utilities.Nibble_To_Char_Map[byte & 0x0f];
@@ -139,8 +139,8 @@ export class Convert {
    */
   public static utf8ToHex = (input: string): string => {
     let hex = '';
-    for(let i = 0; i < input.length; i++) {
-        hex += input.charCodeAt(i).toString(16);
+    for (let i = 0; i < input.length; i++) {
+      hex += input.charCodeAt(i).toString(16);
     }
     return hex;
   };
@@ -169,7 +169,7 @@ export class Convert {
    * @param hex - Hex input
    */
   public static decodeHex = (hex: string): string => {
-    let str = "";
+    let str = '';
     for (let i = 0; i < hex.length; i += 2) {
       str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
     }
@@ -232,9 +232,9 @@ export class Convert {
     let totalLength = arrays.reduce((total, buf) => total + buf.length, 0);
     let result = new Uint8Array(totalLength);
     let offset = 0;
-    for(let buf of arrays) {
-        result.set(buf, offset);
-        offset += buf.length;
+    for (let buf of arrays) {
+      result.set(buf, offset);
+      offset += buf.length;
     }
     return result;
   };

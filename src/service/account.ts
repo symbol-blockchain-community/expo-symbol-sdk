@@ -1,17 +1,17 @@
-import { Convert } from "../util/converter";
-import { KeyPair } from "../util/keypair";
-import { IKeyPair } from "../model/keypair";
-import { Address } from "./address";
-import { NetworkType } from "../model/network";
-import { RawAddress } from "../util/raw-address";
-import { createRandomBytes } from "../util/crypto";
+import { Convert } from '../util/converter';
+import { KeyPair } from '../util/keypair';
+import { IKeyPair } from '../model/keypair';
+import { Address } from './address';
+import { NetworkType } from '../model/network';
+import { RawAddress } from '../util/raw-address';
+import { createRandomBytes } from '../util/crypto';
 
 export class Account {
   private constructor(
     /** The account address. */
     public readonly address: Address,
     /** The account keyPair, public and private key. */
-    private readonly keyPair: IKeyPair,
+    private readonly keyPair: IKeyPair
   ) {}
 
   /** Account public key. */

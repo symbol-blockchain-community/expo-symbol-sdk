@@ -1,4 +1,4 @@
-import forge from "node-forge";
+import forge from 'node-forge';
 
 /**
  * Performs AES GCM encryption and decryption with a given key.
@@ -29,16 +29,16 @@ export class AesGcmCipher {
    * @param {Uint8Array} iv IV bytes.
    * @returns {object} Cipher text with appended tag.
    */
-  encrypt(clearText: Uint8Array): { cipherText: string; initializationVector: string, tag: string; } {
+  encrypt(clearText: Uint8Array): { cipherText: string; initializationVector: string; tag: string } {
     const cipher = forge.cipher.createCipher('AES-GCM', forge.util.createBuffer(this._key));
     const iv = forge.random.getBytesSync(12);
-		cipher.start({ iv });
-		cipher.update(forge.util.createBuffer(clearText));
-		cipher.finish();
-		const cipherText = cipher.output.toHex();
+    cipher.start({ iv });
+    cipher.update(forge.util.createBuffer(clearText));
+    cipher.finish();
+    const cipherText = cipher.output.toHex();
     const tag = cipher.mode.tag.toHex();
     const initializationVector = forge.util.createBuffer(iv).toHex();
-    return {cipherText, initializationVector, tag};
+    return { cipherText, initializationVector, tag };
   }
 
   /**
@@ -56,10 +56,10 @@ export class AesGcmCipher {
     decipher.start({ iv: ivBuffer, tag: tagBuffer });
     decipher.update(forge.util.createBuffer(cipherText));
     const pass = decipher.finish();
-    if(pass) {
-      return new Uint8Array(Array.from(decipher.output.getBytes(), c => c.charCodeAt(0)));
+    if (pass) {
+      return new Uint8Array(Array.from(decipher.output.getBytes(), (c) => c.charCodeAt(0)));
     } else {
-      throw new Error("Unable to authenticate data");
+      throw new Error('Unable to authenticate data');
     }
   }
 }

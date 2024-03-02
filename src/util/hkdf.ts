@@ -20,7 +20,7 @@ export default class hkdf {
       hmac.update(info);
       hmac.update(forge.util.text.utf8.decode(new Uint8Array([i + 1])));
       let digestBytes = hmac.digest().getBytes();
-      let digestCodes = Array.from(digestBytes, c => c.charCodeAt(0));
+      let digestCodes = Array.from(digestBytes, (c) => c.charCodeAt(0));
       prev = new Uint8Array(digestCodes);
       buffers.push(prev);
     }

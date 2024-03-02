@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as utilities from "./convert-utils";
+import * as utilities from './convert-utils';
 
 export class Base32 {
   /**
@@ -30,7 +30,7 @@ export class Base32 {
     for (let i = 0; i < data.length / utilities.Decoded_Block_Size; ++i) {
       utilities.encodeBlock(data, i * utilities.Decoded_Block_Size, output, i * utilities.Encoded_Block_Size);
     }
-    return output.join("");
+    return output.join('');
   };
 
   /**

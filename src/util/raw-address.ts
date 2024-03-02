@@ -1,8 +1,8 @@
 //import ripemd160 from "ripemd160";
-import { Base32 } from "./base32";
-import { Convert } from "./converter";
-import { RawArray } from "./raw-array";
-import { NetworkType } from "../model/network";
+import { Base32 } from './base32';
+import { Convert } from './converter';
+import { RawArray } from './raw-array';
+import { NetworkType } from '../model/network';
 import { ripemd160 } from '@noble/hashes/ripemd160';
 import { sha3_256 } from '@noble/hashes/sha3';
 
@@ -39,7 +39,7 @@ export class RawAddress {
     const padded = new Uint8Array(1 + 8 + 15);
     padded.set([networkType.valueOf() | 0x01], 0);
     padded.set(namespaceId.reverse(), 1);
-    padded.set(Convert.hexToUint8("00".repeat(15)), 9);
+    padded.set(Convert.hexToUint8('00'.repeat(15)), 9);
     return padded;
   };
 
@@ -76,13 +76,16 @@ export class RawAddress {
     RawArray.copy(decodedAddress, ripemdHash, RawAddress.constants.sizes.ripemd160, 1);
 
     // step 4: concatenate (3) and the checksum of (3)
-    const hash = sha3_256.create().update(decodedAddress.subarray(0, RawAddress.constants.sizes.ripemd160 + 1)).digest();
+    const hash = sha3_256
+      .create()
+      .update(decodedAddress.subarray(0, RawAddress.constants.sizes.ripemd160 + 1))
+      .digest();
 
     RawArray.copy(
       decodedAddress,
       RawArray.uint8View(hash),
       RawAddress.constants.sizes.checksum,
-      RawAddress.constants.sizes.ripemd160 + 1,
+      RawAddress.constants.sizes.ripemd160 + 1
     );
 
     return decodedAddress;
