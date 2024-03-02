@@ -1,4 +1,3 @@
-//import ripemd160 from "ripemd160";
 import { Base32 } from './base32';
 import { Convert } from './converter';
 import { RawArray } from './raw-array';
