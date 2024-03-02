@@ -84,6 +84,21 @@ export class MessageEncoder {
   }
 
   /**
+   * Encodes message to recipient using (deprecated) wallet format.
+   * @deprecated This function is only provided for compatability with the original Symbol wallets.
+   *             Please use `encode` in any new code.
+   * @param {PublicKey} recipientPublicKey Recipient public key.
+   * @param {Uint8Array} message Message to encode.
+   * @returns {Uint8Array} Encrypted and encoded message.
+   */
+  encodeDeprecated(recipientPublicKey: Uint8Array | string, message: string | Uint8Array): Uint8Array {
+    // wallet additionally hex encodes
+    const encodedHexString = Convert.uint8ToHex(this.encode(recipientPublicKey, message).subarray(1));
+    const encodedHexStringBytes = Convert.hexToUint8(encodedHexString);
+    return new Uint8Array([1, ...encodedHexStringBytes]);
+  }
+
+  /**
    * Tries to decode encoded message.
    * @deprecated This function is only provided for compatability with the original Symbol wallets.
    *             Please use `tryDecode` in any new code.
