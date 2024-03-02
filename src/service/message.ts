@@ -42,15 +42,20 @@ export class MessageEncoder {
    * @param {Uint8Array} encodedMessage Encoded message.
    * @returns {TryDecodeResult} Tuple containing decoded status and message.
    */
-  tryDecode(senderPublicKey: Uint8Array | string, encodedMessage: Uint8Array): TryDecodeResult {
+  tryDecode(senderPublicKey: Uint8Array | string, encodedMessage: Uint8Array | string): TryDecodeResult {
     senderPublicKey =
       typeof senderPublicKey === "string"
         ? Convert.hexToUint8(senderPublicKey)
         : senderPublicKey;
+
+    encodedMessage = typeof encodedMessage === "string" ? Convert.hexToUint8(encodedMessage) : encodedMessage;
+
     if (1 === encodedMessage[0]) {
       const [result, message] = filterExceptions(
         () =>
-          decodeAesGcm(deriveSharedKey, this._privateKey, senderPublicKey as Uint8Array, encodedMessage.subarray(1)),
+          decodeAesGcm(
+            deriveSharedKey, this._privateKey, senderPublicKey as Uint8Array,
+            (encodedMessage as Uint8Array).subarray(1)),
         ["Unsupported state or unable to authenticate data", "invalid point"]
       );
       if (result) return { isDecoded: true, message: utf8ArrayToString(message as Uint8Array) };
@@ -64,14 +69,16 @@ export class MessageEncoder {
    * @param {Uint8Array} message Message to encode.
    * @returns {Uint8Array} Encrypted and encoded message.
    */
-  encode(recipientPublicKey: Uint8Array | string, message: string): Uint8Array {
+  encode(recipientPublicKey: Uint8Array | string, message: string | Uint8Array): Uint8Array {
     recipientPublicKey =
       typeof recipientPublicKey === "string" ? Convert.hexToUint8(recipientPublicKey) : recipientPublicKey;
+    message = typeof message === "string" ? Convert.utf8ToUint8(message) : message;
+
     const { tag, initializationVector, cipherText } = encodeAesGcm(
       deriveSharedKey,
       this._privateKey,
       recipientPublicKey,
-      new Uint8Array(Convert.utf8ToUint8(message))
+      message
     );
     return Convert.hexToUint8('01' + tag + initializationVector + cipherText);
   }
@@ -84,11 +91,13 @@ export class MessageEncoder {
 	 * @param {Uint8Array} encodedMessage Encoded message
 	 * @returns {TryDecodeResult} Tuple containing decoded status and message.
 	 */
-	tryDecodeDeprecated(senderPublicKey: Uint8Array | string, encodedMessage: Uint8Array): TryDecodeResult {
+	tryDecodeDeprecated(senderPublicKey: Uint8Array | string, encodedMessage: Uint8Array | string): TryDecodeResult {
     senderPublicKey =
       typeof senderPublicKey === "string"
         ? Convert.hexToUint8(senderPublicKey)
         : senderPublicKey;
+    encodedMessage = typeof encodedMessage === "string" ? Convert.hexToUint8(encodedMessage) : encodedMessage;
+
 		const encodedHexString = Convert.uint8ToHex(encodedMessage.subarray(1));
 		if (1 === encodedMessage[0] && Convert.isHexString(encodedHexString)) {
 			// wallet additionally hex encodes
