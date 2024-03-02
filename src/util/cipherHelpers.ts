@@ -1,5 +1,4 @@
-import { AesGcmCipher, concatArrays } from "./cipher";
-import * as crypto from "expo-crypto";
+import { AesGcmCipher } from './cipher';
 
 const GCM_IV_SIZE = 12;
 const SALT_SIZE = 32;
@@ -14,32 +13,28 @@ const decodeAesGcm = (
   deriveSharedKey: (privateKey: Uint8Array, recipientPublicKey: Uint8Array) => Uint8Array,
   privateKey: Uint8Array,
   recipientPublicKey: Uint8Array,
-  encodedMessage: Uint8Array,
+  encodedMessage: Uint8Array
 ) => {
   const { tag, initializationVector, encodedMessageData } = decode(AesGcmCipher.TAG_SIZE, GCM_IV_SIZE, encodedMessage);
 
   const sharedKey = deriveSharedKey(privateKey, recipientPublicKey);
   const cipher = new AesGcmCipher(sharedKey);
 
-  return new Uint8Array(cipher.decrypt(concatArrays(encodedMessageData, tag), initializationVector));
+  return new Uint8Array(cipher.decrypt(encodedMessageData, tag, initializationVector));
 };
 
 const encodeAesGcm = (
   deriveSharedKey: (privateKey: Uint8Array, recipientPublicKey: Uint8Array) => Uint8Array,
   privateKey: Uint8Array,
   recipientPublicKey: Uint8Array,
-  message: Uint8Array,
-  iv: Uint8Array | undefined = undefined,
+  message: Uint8Array
 ) => {
   const sharedKey = deriveSharedKey(privateKey, recipientPublicKey);
   const cipher = new AesGcmCipher(sharedKey);
 
-  const initializationVector = iv ?? new Uint8Array(crypto.getRandomBytes(GCM_IV_SIZE));
-  const cipherText = cipher.encrypt(message, initializationVector);
-  const tagStartOffset = cipherText.length - AesGcmCipher.TAG_SIZE;
-  const tag = cipherText.subarray(tagStartOffset);
+  const { cipherText, initializationVector, tag } = cipher.encrypt(message);
 
-  return { tag, initializationVector, cipherText: cipherText.subarray(0, tagStartOffset) };
+  return { tag, initializationVector, cipherText };
 };
 
-export { concatArrays, decodeAesGcm, encodeAesGcm, SALT_SIZE };
+export { decodeAesGcm, encodeAesGcm, SALT_SIZE };

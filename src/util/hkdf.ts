@@ -1,28 +1,33 @@
-import createHmac from "create-hmac";
+import forge from 'node-forge';
+import { Convert } from './converter';
 
 export default class hkdf {
-  static extract(key: Buffer, message: Buffer) {
-    const hmac = createHmac("sha256", key);
-    hmac.update(message);
+  static extract(key: Uint8Array, message: Uint8Array) {
+    var hmac = forge.hmac.create();
+    hmac.start('sha256', forge.util.createBuffer(key));
+    hmac.update(String.fromCharCode.apply(null, [...message]));
     return hmac.digest();
   }
 
-  static expand(prk: Buffer, info: Buffer, length: number) {
+  static expand(prk: forge.util.ByteStringBuffer, info: string, length: number) {
     const iterations = Math.ceil(length / 32);
     const buffers = [];
-    let prev = Buffer.from("");
+    let prev = new Uint8Array();
     for (let i = 0; i < iterations; i++) {
-      const hmac = createHmac("sha256", prk);
-      hmac.update(prev);
+      var hmac = forge.hmac.create();
+      hmac.start('sha256', prk);
+      hmac.update(String.fromCharCode.apply(null, [...prev]));
       hmac.update(info);
-      hmac.update(Buffer.from([i + 1]));
-      prev = hmac.digest();
+      hmac.update(forge.util.text.utf8.decode(new Uint8Array([i + 1])));
+      let digestBytes = hmac.digest().getBytes();
+      let digestCodes = Array.from(digestBytes, (c) => c.charCodeAt(0));
+      prev = new Uint8Array(digestCodes);
       buffers.push(prev);
     }
-    return Buffer.concat(buffers, length);
+    return Convert.concatArrays(buffers);
   }
 
-  static deriveSecret(secret: Buffer, salt: Buffer, info: Buffer, length: number) {
+  static deriveSecret(secret: Uint8Array, salt: Uint8Array, info: string, length: number) {
     const prk = hkdf.extract(salt, secret);
     return hkdf.expand(prk, info, length);
   }

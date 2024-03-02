@@ -1,5 +1,5 @@
-import { decode } from "utf8";
-import * as utilities from "./convert-utils";
+import { decode } from 'utf8';
+import * as utilities from './convert-utils';
 
 export class Convert {
   /**
@@ -87,7 +87,7 @@ export class Convert {
    * @returns A hex encoded string corresponding to the input.
    */
   public static uint8ToHex = (input: Uint8Array): string => {
-    let s = "";
+    let s = '';
     for (const byte of input) {
       s += utilities.Nibble_To_Char_Map[byte >> 4];
       s += utilities.Nibble_To_Char_Map[byte & 0x0f];
@@ -138,7 +138,11 @@ export class Convert {
    * @param input - An UTF-8 string
    */
   public static utf8ToHex = (input: string): string => {
-    return Buffer.from(input, "utf-8").toString("hex").toUpperCase();
+    let hex = '';
+    for (let i = 0; i < input.length; i++) {
+      hex += input.charCodeAt(i).toString(16);
+    }
+    return hex;
   };
 
   /**
@@ -165,7 +169,7 @@ export class Convert {
    * @param hex - Hex input
    */
   public static decodeHex = (hex: string): string => {
-    let str = "";
+    let str = '';
     for (let i = 0; i < hex.length; i += 2) {
       str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
     }
@@ -183,15 +187,13 @@ export class Convert {
    * @return {string} - delta value in Hex
    */
   public static xor(value1: Uint8Array, value2: Uint8Array): string {
-    const buffer1 = Buffer.from(value1.buffer as ArrayBuffer);
-    const buffer2 = Buffer.from(value2.buffer as ArrayBuffer);
-    const length = Math.max(buffer1.length, buffer2.length);
+    const length = Math.max(value1.length, value2.length);
     const delta: number[] = [];
     for (let i = 0; i < length; ++i) {
-      const xorBuffer = buffer1[i] ^ buffer2[i];
-      delta.push(xorBuffer);
+      const xorValue = (value1[i] || 0) ^ (value2[i] || 0);
+      delta.push(xorValue);
     }
-    return Convert.uint8ToHex(Uint8Array.from(delta));
+    return Convert.uint8ToHex(new Uint8Array(delta));
   }
 
   /**
@@ -220,4 +222,20 @@ export class Convert {
     }
     return value >>> 0;
   }
+
+  /**
+   * Concatenates the input arrays into a single array.
+   *@param arrays the arrays to concatenate.
+   * @returns A Uint8Array corresponding to the input.
+   */
+  public static concatArrays = (arrays: Uint8Array[]) => {
+    let totalLength = arrays.reduce((total, buf) => total + buf.length, 0);
+    let result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (let buf of arrays) {
+      result.set(buf, offset);
+      offset += buf.length;
+    }
+    return result;
+  };
 }

@@ -1,6 +1,6 @@
-import { Convert } from "../util/converter";
-import { NetworkType } from "../model/network";
-import { RawAddress } from "../util/raw-address";
+import { Convert } from '../util/converter';
+import { NetworkType } from '../model/network';
+import { RawAddress } from '../util/raw-address';
 
 /**
  * The address structure describes an address with its network
@@ -26,16 +26,16 @@ export class Address {
    */
   public static createFromRawAddress(rawAddress: string): Address {
     let networkType: NetworkType;
-    const addressTrimAndUpperCase: string = rawAddress.trim().toUpperCase().replace(/-/g, "");
+    const addressTrimAndUpperCase: string = rawAddress.trim().toUpperCase().replace(/-/g, '');
     if (addressTrimAndUpperCase.length !== 39) {
-      throw new Error("Address " + addressTrimAndUpperCase + " has to be 39 characters long");
+      throw new Error('Address ' + addressTrimAndUpperCase + ' has to be 39 characters long');
     }
-    if (addressTrimAndUpperCase.charAt(0) === "T") {
+    if (addressTrimAndUpperCase.charAt(0) === 'T') {
       networkType = NetworkType.TEST_NET;
-    } else if (addressTrimAndUpperCase.charAt(0) === "N") {
+    } else if (addressTrimAndUpperCase.charAt(0) === 'N') {
       networkType = NetworkType.MAIN_NET;
     } else {
-      throw new Error("Address Network unsupported");
+      throw new Error('Address Network unsupported');
     }
     return new Address(addressTrimAndUpperCase, networkType);
   }
@@ -55,7 +55,7 @@ export class Address {
    * @returns {boolean} true if the raw address string is valid, false otherwise.
    */
   public static isValidRawAddress = (rawAddress: string): boolean => {
-    if (!["A", "I", "Q", "Y"].includes(rawAddress.slice(-1).toUpperCase())) {
+    if (!['A', 'I', 'Q', 'Y'].includes(rawAddress.slice(-1).toUpperCase())) {
       return false;
     }
     try {
@@ -91,7 +91,7 @@ export class Address {
     /**
      * The NEM network type.
      */
-    public readonly networkType: NetworkType,
+    public readonly networkType: NetworkType
   ) {}
 
   /**
@@ -115,7 +115,7 @@ export class Address {
    * @returns {string}
    */
   public pretty(): string {
-    return this.address.match(/.{1,6}/g)!.join("-");
+    return this.address.match(/.{1,6}/g)!.join('-');
   }
 
   /**

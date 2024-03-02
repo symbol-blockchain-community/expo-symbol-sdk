@@ -11,7 +11,7 @@ export class RawArray {
       return input;
     }
 
-    throw Error("unsupported type passed to uint8View");
+    throw Error('unsupported type passed to uint8View');
   };
 
   /**
@@ -27,7 +27,7 @@ export class RawArray {
     src: Uint8Array,
     numElementsToCopy?: number,
     destOffset: number = 0,
-    srcOffset: number = 0,
+    srcOffset: number = 0
   ): any => {
     const length = undefined === numElementsToCopy ? dest.length : numElementsToCopy;
     for (let i = 0; i < length; ++i) {
