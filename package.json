@@ -1,6 +1,6 @@
 {
   "name": "@symbol-blockchain-community/expo-symbol-sdk",
-  "version": "0.0.1-6",
+  "version": "1.0.0",
   "description": "This package is a standalone alternative to symbol-sdk for managed React Native environments with Expo.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -9,7 +9,7 @@
   "author": "ym.u.ichiro@gmail.com",
   "homepage": "https://symbol-community.com",
   "repository": {
-    "url": "https://github.com/Symbol-Blockchain-Community/expo-symbol-sdk"
+    "url": "https://github.com/symbol-blockchain-community/expo-symbol-sdk"
   },
   "publishConfig": {
     "access": "public"
