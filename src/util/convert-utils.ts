@@ -1,4 +1,4 @@
-export const createBuilder = (): any => {
+const createBuilder = (): any => {
   const map: { [key: string]: number } = {};
   return {
     map,
@@ -30,7 +30,7 @@ const Char_To_Nibble_Map = (): any => {
 };
 
 export const Nibble_To_Char_Map = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
-export const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 export const Decoded_Block_Size = 5;
 export const Encoded_Block_Size = 8;
 export const tryParseByte = (char1: string, char2: string): any => {
@@ -51,14 +51,14 @@ export const encodeBlock = (input: any, inputOffset: number, output: any, output
   output[outputOffset + 7] = Alphabet[input[inputOffset + 4] & 0x1f];
 };
 
-export const Char_To_Decoded_Char_Map = (): any => {
+const Char_To_Decoded_Char_Map = (): any => {
   const builder = createBuilder();
   builder.addRange('A', 'Z', 0);
   builder.addRange('2', '7', 26);
   return builder.map;
 };
 
-export const decodeChar = (c: any): any => {
+const decodeChar = (c: any): any => {
   const charMap = Char_To_Decoded_Char_Map();
   const decodedChar = charMap[c];
   if (undefined !== decodedChar) {
@@ -78,19 +78,4 @@ export const decodeBlock = (input: any, inputOffset: number, output: any, output
   output[outputOffset + 2] = ((bytes[3] & 0x0f) << 4) | (bytes[4] >> 1);
   output[outputOffset + 3] = ((bytes[4] & 0x01) << 7) | (bytes[5] << 2) | (bytes[6] >> 3);
   output[outputOffset + 4] = ((bytes[6] & 0x07) << 5) | bytes[7];
-};
-
-/**
- * Traverses the tree object to pick addresses strings.
- * of multisig children
- * to parse tree and pick children addresses
- */
-export const parseObjectProperties = (obj: any[], parse: Function): any => {
-  for (const k in obj) {
-    if (typeof obj[k] === 'object' && obj[k] !== null) {
-      parseObjectProperties(obj[k], parse);
-    } else if (Object.prototype.hasOwnProperty.call(obj, k)) {
-      parse(k, obj[k]);
-    }
-  }
 };

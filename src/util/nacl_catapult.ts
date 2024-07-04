@@ -2,7 +2,7 @@
 const _9 = new Uint8Array(32);
 _9[0] = 9;
 
-export const gf = (init?: string | any[] | undefined) => {
+const gf = (init?: string | any[] | undefined) => {
   let i: number;
   const r = new Float64Array(16);
   if (init) {
@@ -646,11 +646,11 @@ const unpack25519 = (o: number[], n: Uint8Array) => {
   o[15] &= 0x7fff;
 };
 
-export const crypto_verify_32 = (x: Uint8Array, xi: number, y: Uint8Array, yi: number) => {
+const crypto_verify_32 = (x: Uint8Array, xi: number, y: Uint8Array, yi: number) => {
   return vn(x, xi, y, yi, 32);
 };
 
-export const add = (p: any[], q: any[]) => {
+const add = (p: any[], q: any[]) => {
   const a = gf(),
     b = gf(),
     c = gf(),
@@ -680,82 +680,4 @@ export const add = (p: any[], q: any[]) => {
   M(p[1], h, g);
   M(p[2], g, f);
   M(p[3], e, h);
-};
-
-export const pack = (r: Uint8Array, p: any[]) => {
-  const tx = gf(),
-    ty = gf(),
-    zi = gf();
-  inv25519(zi, p[2]);
-  M(tx, p[0], zi);
-  M(ty, p[1], zi);
-  pack25519(r, ty);
-  r[31] ^= par25519(tx) << 7;
-};
-
-export const scalarmult = (p: any[], q: any, s: Uint8Array) => {
-  let b: number, i: number;
-  set25519(p[0], gf0);
-  set25519(p[1], gf1);
-  set25519(p[2], gf1);
-  set25519(p[3], gf0);
-  for (i = 255; i >= 0; --i) {
-    b = (s[(i / 8) | 0] >> (i & 7)) & 1;
-    cswap(p, q, b);
-    add(q, p);
-    add(p, p);
-    cswap(p, q, b);
-  }
-};
-
-export const unpack = (r: any[], p: Uint8Array) => {
-  const t = gf(),
-    chk = gf(),
-    num = gf(),
-    den = gf(),
-    den2 = gf(),
-    den4 = gf(),
-    den6 = gf();
-
-  set25519(r[2], gf1);
-  unpack25519(r[1], p);
-
-  // num = u = y^2 - 1
-  // den = v = d * y^2 + 1
-  S(num, r[1]);
-  M(den, num, D);
-  Z(num, num, r[2]);
-  A(den, r[2], den);
-
-  // r[0] = x = sqrt(u / v)
-  S(den2, den);
-  S(den4, den2);
-  M(den6, den4, den2);
-  M(t, den6, num);
-  M(t, t, den);
-
-  pow2523(t, t);
-  M(t, t, num);
-  M(t, t, den);
-  M(t, t, den);
-  M(r[0], t, den);
-
-  S(chk, r[0]);
-  M(chk, chk, den);
-  if (neq25519(chk, num)) {
-    M(r[0], r[0], I);
-  }
-
-  S(chk, r[0]);
-  M(chk, chk, den);
-  if (neq25519(chk, num)) {
-    return -1;
-  }
-
-  if (par25519(r[0]) !== p[31] >> 7) {
-    Z(r[0], gf0, r[0]);
-  }
-
-  M(r[3], r[0], r[1]);
-  return 0;
 };

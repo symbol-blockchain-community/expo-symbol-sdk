@@ -1,7 +1,6 @@
 import { AesGcmCipher } from './cipher';
 
 const GCM_IV_SIZE = 12;
-const SALT_SIZE = 32;
 
 const decode = (tagSize: number, ivSize: number, encodedMessage: Uint8Array) => ({
   tag: encodedMessage.subarray(0, tagSize),
@@ -37,4 +36,4 @@ const encodeAesGcm = (
   return { tag, initializationVector, cipherText };
 };
 
-export { decodeAesGcm, encodeAesGcm, SALT_SIZE };
+export { decodeAesGcm, encodeAesGcm };
